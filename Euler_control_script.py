@@ -13,16 +13,16 @@ def coeff_solver(i, f, T, vi, vf):
     Tmat[6, 4] = 6
 
     for p in range(8):
-        Tmat[1, p] = T**(8 - p)
+        Tmat[1, p] = T**(7 - p)
 
     for p in range(8):
-        Tmat[3, p] = (8 - p) * T**(7 - p)
+        Tmat[3, p] = (7 - p) * T**(6 - p)
 
     for p in range(8):
-        Tmat[5, p] = (8 - p) * (7 - p) * T**(6 - p)
+        Tmat[5, p] = (7 - p) * (6 - p) * T**(5 - p)
 
     for p in range(8):
-        Tmat[7, p] = (8 - p) * (7 - p) * (6 - p) * T**(5 - p)
+        Tmat[7, p] = (7 - p) * (6 - p) * (5 - p) * T**(4 - p)
 
     for q in range(3):
         C_hold[:, q] = np.linalg.solve(Tmat, X[:, q])
@@ -53,7 +53,7 @@ def visualizer(i, f, W, S, t1, t2):
         ta = Tind / 100
         for u in range(3):
             for v in range(8):
-                pa[Tind, u] += S[v, u, 0] * (ta**(8 - v))
+                pa[Tind, u] += S[v, u, 0] * (ta**(7 - v))
 
     T = np.arange(0, t2 - t1, 0.01)
     pb = np.zeros((len(T), 3))
@@ -62,16 +62,18 @@ def visualizer(i, f, W, S, t1, t2):
         tb = Tind / 100
         for u in range(3):
             for v in range(8):
-                pb[Tind, u] += S[v, u, 1] * (tb**(8 - v))
+                pb[Tind, u] += S[v, u, 1] * (tb**(7 - v))
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
+
+    W_ = np.array([W[0], W[1], W[2], W[3], W[0]])
 
     ax.plot(i[0], i[1], i[2], 'gx', label='Initial Position')
     ax.plot(f[0], f[1], f[2], 'rx', label='Final Position')
     ax.plot(pa[:, 0], pa[:, 1], pa[:, 2], 'g-', label='Trajectory to Window')
     ax.plot(pb[:, 0], pb[:, 1], pb[:, 2], 'b-', label='Trajectory through Window')
-    ax.plot(W[:, 0], W[:, 1], W[:, 2], 'r-', label='Window Frame')
+    ax.plot(W_[:, 0], W_[:, 1], W_[:, 2], 'r-', label='Window Frame')
     
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
